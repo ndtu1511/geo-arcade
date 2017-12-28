@@ -9,7 +9,7 @@ public class gameWindow extends JFrame{
     gameCanvas gameCanvas;
     private long lasttime=0;
     public gameWindow(){
-        this.setSize(400,650);
+        this.setSize(419,648);
         this.setupGameCanvas();
         this.setVisible(true);
         this.event();
@@ -35,13 +35,17 @@ public class gameWindow extends JFrame{
     }
     public void gameLoop(){
         while (true){
-            //this.run();
             long currentTime = System.nanoTime();
-            if (currentTime-this.lasttime>=17_000_000){//cách viết của 17 triệu nano giây
+            if (currentTime-this.lasttime>=17_000_000){
+                // uncomment bai 1 va 2 va comment bai 3 de xem bai 1 va 2
+//                this.gameCanvas.enemy1.btap1();
+//                this.gameCanvas.enemy2.btap2();
+                for (int i=0;i<gameCanvas.sizeBT3;i++) {
+                    this.gameCanvas.enemy3[i].btap1();
+                }
                 this.gameCanvas.renderAll();
                 this.lasttime=currentTime;
             }
-            gameCanvas.repaint();
         }
     }
 }
