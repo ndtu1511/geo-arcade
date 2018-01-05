@@ -54,7 +54,7 @@ public class Enemy {
         BulletEnemy bulletEnemy = new BulletEnemy(positionEnemyX+15, positionEnemyY+15, "resources/square/enemy_square_bullet.png", 3);
         this.bulletEnemy.add(bulletEnemy);
     }
-    public void runBullet(){
+    public void moveBullet(){
         for (BulletEnemy bulletEnemy : this.bulletEnemy){
             bulletEnemy.shoot();
         }

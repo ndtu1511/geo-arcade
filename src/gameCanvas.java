@@ -12,9 +12,6 @@ public class gameCanvas extends JPanel{
     BufferedImage backGround;
     BufferedImage backBuffered;
     Graphics graphics;
-    Vector<BulletPlayer> vectorBullet;
-    Vector<BulletPlayer> vectorBulletLeft;
-    Vector<BulletPlayer> vectorBulletRight;
     Vector<Enemy> vectorEnemy;
     Vector<Enemy> enemyMedium;
     Player player;
@@ -44,9 +41,6 @@ public class gameCanvas extends JPanel{
     }
     private void setupPlayer(){
         this.player = new Player("resources/player/straight.png");
-        this.vectorBullet = new Vector<>();
-        this.vectorBulletLeft = new Vector<>();
-        this.vectorBulletRight = new Vector<>();
     }
     private void setupBackBuffer(){
         this.backBuffered = new BufferedImage(400,600,BufferedImage.TYPE_4BYTE_ABGR);
@@ -59,15 +53,6 @@ public class gameCanvas extends JPanel{
     public void renderAll(){
         this.graphics.drawImage(this.backGround,0,0,null);
         player.render(this.graphics);
-        for (BulletPlayer bulletPlayer:this.vectorBullet) {
-            bulletPlayer.render(this.graphics);
-        }
-        for (BulletPlayer bulletPlayer:this.vectorBulletLeft){
-            bulletPlayer.render(this.graphics);
-        }
-        for (BulletPlayer bulletPlayer:this.vectorBulletRight){
-            bulletPlayer.render(this.graphics);
-        }
         for (Enemy enemies:this.vectorEnemy){
             enemies.render(this.graphics);
         }
@@ -77,12 +62,10 @@ public class gameCanvas extends JPanel{
         this.repaint();
     }
     public void runAll(){
+        player.addBullet();
         if (this.count==30){
             int randomPositionEnemies = random.nextInt(400);
             int randomMediumEnemies = random.nextInt(4);
-            BulletPlayer bulletPlayer = new BulletPlayer(player.x, player.y,"resources/player/player_bullet.png",3);
-            BulletPlayer bulletPlayerLeft = new BulletPlayer(player.x, player.y,"resources/player/player_bullet.png",3);
-            BulletPlayer bulletPlayerRight = new BulletPlayer(player.x, player.y,"resources/player/player_bullet.png",3);
             if (randomMediumEnemies==1){
                 Enemy enemy = new Enemy(randomPositionEnemies,0,"resources/square/enemy_square_medium.png");
                 this.enemyMedium.add(enemy);
@@ -91,29 +74,18 @@ public class gameCanvas extends JPanel{
                 Enemy enemy = new Enemy(randomPositionEnemies, 0, "resources/square/enemy_square_small.png");
                 this.vectorEnemy.add(enemy);
             }
-            this.vectorBullet.add(bulletPlayer);
-            this.vectorBulletLeft.add(bulletPlayerLeft);
-            this.vectorBulletRight.add(bulletPlayerRight);
             this.count=0;
         }
         else {
             this.count++;
         }
-        for (BulletPlayer bulletPlayer:this.vectorBullet){
-            bulletPlayer.shoot();
-        }
-        for (BulletPlayer bulletPlayer:this.vectorBulletLeft){
-            bulletPlayer.shoot("left");
-        }
-        for (BulletPlayer bulletPlayer:this.vectorBulletRight){
-            bulletPlayer.shoot("right");
-        }
-        for (Enemy enemies : this.vectorEnemy){
-            enemies.run();
+        player.moveBullet();
+        for (Enemy enemy : this.vectorEnemy){
+            enemy.run();
         }
         for (Enemy enemy : this.enemyMedium) {
             enemy.run();
-            enemy.runBullet();
+            enemy.moveBullet();
         }
     }
 }
