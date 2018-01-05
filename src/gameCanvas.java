@@ -4,30 +4,30 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
+import java.util.Vector;
 
 // dùng backbuffer để chuẩn bị trước hình ảnh
 public class gameCanvas extends JPanel{
-    BufferedImage backGround,player;
+    BufferedImage backGround;
     BufferedImage backBuffered;
     Graphics graphics;
-    enemy enemy1;
-    enemy enemy2;
-    enemy[] enemy3;
-    public int positionPlayerX = 200;
-    public int positionPlayerY = 300;
-    int sizeBT3=10;
+    Vector<BulletPlayer> vectorBullet;
+    Vector<BulletPlayer> vectorBulletLeft;
+    Vector<BulletPlayer> vectorBulletRight;
+    Vector<Enemy> vectorEnemy;
+    Vector<Enemy> enemyMedium;
+    Player player;
+    Random random;
+    int count =0;
     public gameCanvas(){
         this.setSize(400,600);
         this.setVisible(true);
-        this.enemy1 = new enemy(100,0);
-        this.enemy2 = new enemy(250,0);
-        this.enemy3 = new enemy[sizeBT3];
-        for (int i=0;i<sizeBT3;i++){
-            this.enemy3[i] = new enemy(i*40,0);
-        }
+        random = new Random();
         this.setupBackBuffer();
         this.setupBackGround();
         this.setupPlayer();
+        this.setupEnemy();
     }
 
     private void setupBackGround(){
@@ -38,12 +38,15 @@ public class gameCanvas extends JPanel{
         }
 
     }
+    private void setupEnemy(){
+        vectorEnemy = new Vector<>();
+        enemyMedium = new Vector<>();
+    }
     private void setupPlayer(){
-        try {
-            this.player = ImageIO.read(new File("resources/player/straight.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.player = new Player("resources/player/straight.png");
+        this.vectorBullet = new Vector<>();
+        this.vectorBulletLeft = new Vector<>();
+        this.vectorBulletRight = new Vector<>();
     }
     private void setupBackBuffer(){
         this.backBuffered = new BufferedImage(400,600,BufferedImage.TYPE_4BYTE_ABGR);
@@ -55,12 +58,62 @@ public class gameCanvas extends JPanel{
     }
     public void renderAll(){
         this.graphics.drawImage(this.backGround,0,0,null);
-        this.graphics.drawImage(this.player,positionPlayerX-20,positionPlayerY-30,null);
-        this.graphics.drawImage(enemy1.enemies, enemy1.positionEnemyX, enemy1.positionEnemyY,null);
-        this.graphics.drawImage(enemy2.enemies, enemy2.positionEnemyX, enemy2.positionEnemyY,null);
-        for (int i=0;i<sizeBT3;i++){
-            this.graphics.drawImage(enemy3[i].enemies,enemy3[i].positionEnemyX,enemy3[i].positionEnemyY,null);
+        player.render(this.graphics);
+        for (BulletPlayer bulletPlayer:this.vectorBullet) {
+            bulletPlayer.render(this.graphics);
+        }
+        for (BulletPlayer bulletPlayer:this.vectorBulletLeft){
+            bulletPlayer.render(this.graphics);
+        }
+        for (BulletPlayer bulletPlayer:this.vectorBulletRight){
+            bulletPlayer.render(this.graphics);
+        }
+        for (Enemy enemies:this.vectorEnemy){
+            enemies.render(this.graphics);
+        }
+        for (Enemy enemy:this.enemyMedium){
+            enemy.render(this.graphics);
         }
         this.repaint();
+    }
+    public void runAll(){
+        if (this.count==30){
+            int randomPositionEnemies = random.nextInt(400);
+            int randomMediumEnemies = random.nextInt(4);
+            BulletPlayer bulletPlayer = new BulletPlayer(player.x, player.y,"resources/player/player_bullet.png",3);
+            BulletPlayer bulletPlayerLeft = new BulletPlayer(player.x, player.y,"resources/player/player_bullet.png",3);
+            BulletPlayer bulletPlayerRight = new BulletPlayer(player.x, player.y,"resources/player/player_bullet.png",3);
+            if (randomMediumEnemies==1){
+                Enemy enemy = new Enemy(randomPositionEnemies,0,"resources/square/enemy_square_medium.png");
+                this.enemyMedium.add(enemy);
+            }
+            else {
+                Enemy enemy = new Enemy(randomPositionEnemies, 0, "resources/square/enemy_square_small.png");
+                this.vectorEnemy.add(enemy);
+            }
+            this.vectorBullet.add(bulletPlayer);
+            this.vectorBulletLeft.add(bulletPlayerLeft);
+            this.vectorBulletRight.add(bulletPlayerRight);
+            this.count=0;
+        }
+        else {
+            this.count++;
+        }
+        for (BulletPlayer bulletPlayer:this.vectorBullet){
+            bulletPlayer.shoot();
+        }
+        for (BulletPlayer bulletPlayer:this.vectorBulletLeft){
+            bulletPlayer.shoot("left");
+        }
+        for (BulletPlayer bulletPlayer:this.vectorBulletRight){
+            bulletPlayer.shoot("right");
+        }
+        for (Enemy enemies : this.vectorEnemy){
+            enemies.run();
+        }
+        for (Enemy enemy : this.enemyMedium) {
+            enemy.run();
+            enemy.runBullet();
+        }
     }
 }

@@ -22,8 +22,8 @@ public class gameWindow extends JFrame{
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                gameCanvas.positionPlayerX = e.getX();
-                gameCanvas.positionPlayerY = e.getY();
+                gameCanvas.player.x = e.getX();
+                gameCanvas.player.y = e.getY();
             }
         });
         this.addWindowListener(new WindowAdapter() {
@@ -37,12 +37,7 @@ public class gameWindow extends JFrame{
         while (true){
             long currentTime = System.nanoTime();
             if (currentTime-this.lasttime>=17_000_000){
-                // uncomment bai 1 va 2 va comment bai 3 de xem bai 1 va 2
-//                this.gameCanvas.enemy1.btap1();
-//                this.gameCanvas.enemy2.btap2();
-                for (int i=0;i<gameCanvas.sizeBT3;i++) {
-                    this.gameCanvas.enemy3[i].btap1();
-                }
+                this.gameCanvas.runAll();
                 this.gameCanvas.renderAll();
                 this.lasttime=currentTime;
             }
