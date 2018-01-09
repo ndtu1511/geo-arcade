@@ -5,43 +5,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-public class Player {
-    int x;
-    int y;
+public class Player extends GameObject {
     int count=0;
-    BufferedImage image;
-    Vector<BulletPlayer> vectorBullet;
-    public Player(String url){
-        try {
-            this.image = ImageIO.read(new File(url));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.vectorBullet = new Vector<>();
+    public Player(){
+        this.image = Utils.loadImage("resources/player/straight.png");
     }
-    public void render(Graphics graphics){
-        graphics.drawImage(image,this.x-20,this.y-30,null);
-        for (BulletPlayer bulletPlayer:this.vectorBullet) {
-            bulletPlayer.render(graphics);
+    @Override
+    public void run() {
+        super.run();
+        if (this.count==50){
+            BulletPlayer bulletPlayer = new BulletPlayer();
+            bulletPlayer.position.set(this.position);
+            bulletPlayer.velocity.set(0.0f,3.0f);
+            GameObject.add(bulletPlayer);
+            this.count=0;
         }
-    }
-    public void addBullet(){
-        if (this.count==50) {
-            BulletPlayer bulletPlayer = new BulletPlayer(x, y, "resources/player/player_bullet.png", 3,0);
-            BulletPlayer bulletPlayerLeft = new BulletPlayer(x, y, "resources/player/player_bullet.png", 3,3);
-            BulletPlayer bulletPlayerRight = new BulletPlayer(x, y, "resources/player/player_bullet.png", 3,-3);
-            this.vectorBullet.add(bulletPlayer);
-            this.vectorBullet.add(bulletPlayerLeft);
-            this.vectorBullet.add(bulletPlayerRight);
-            this.count = 0;
-        }
-        else{
+        else {
             count++;
-        }
-    }
-    public void moveBullet(){
-        for (BulletPlayer bulletPlayer : this.vectorBullet) {
-            bulletPlayer.shoot();
         }
     }
 }

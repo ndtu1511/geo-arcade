@@ -4,25 +4,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class BulletEnemy {
-    public int x;
-    public int y;
-    public BufferedImage image;
-    public int speed;
-    public BulletEnemy(int x, int y, String url, int speed){
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        try {
-            this.image = ImageIO.read(new File(url));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+public class BulletEnemy extends GameObject {
+    Vector2D velocity;
+    public BulletEnemy(){
+        this.velocity = new Vector2D();
+        this.image = Utils.loadImage("resources/square/enemy_square_bullet.png");
     }
-    public void shoot(){
-        this.y += this.speed;
-    }
-    public void render(Graphics graphics){
-        graphics.drawImage(this.image,this.x,this.y,null);
+    @Override
+    public void run() {
+        super.run();
+        this.position.addUp(velocity);
     }
 }
