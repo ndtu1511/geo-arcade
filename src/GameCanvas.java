@@ -1,22 +1,26 @@
-import javax.imageio.ImageIO;
+import Core.GameObject;
+import Game.BackGround.BackGround;
+import Game.Enemy.CircleEnemy;
+import Game.Enemy.EnemyShoot;
+import Game.Enemy.EnemySqawner;
+import Game.Enemy.MatrixEnemy;
+import Game.Player.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-import java.util.Vector;
 
 // dùng backbuffer để chuẩn bị trước hình ảnh
-public class gameCanvas extends JPanel{
+public class GameCanvas extends JPanel{
     BufferedImage backGround;
     BufferedImage backBuffered;
     Graphics graphics;
-    Player player;
+    public Player player;
     Random random;
     int count =0;
-    public gameCanvas(){
-        this.setSize(400,600);
+    public GameCanvas(){
+        this.setSize(40,40);
         this.setVisible(true);
         random = new Random();
         this.setupBackBuffer();
@@ -26,15 +30,12 @@ public class gameCanvas extends JPanel{
     }
 
     private void setupBackGround(){
-        try {
-            this.backGround = ImageIO.read(new File("resources/background/background.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        GameObject.add(new BackGround());
     }
     private void setupEnemy(){
         GameObject.add(new EnemySqawner());
+        GameObject.add(new CircleEnemy());
+        GameObject.add(new MatrixEnemy());
     }
     private void setupPlayer(){
         this.player = new Player();

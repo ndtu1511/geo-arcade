@@ -1,4 +1,7 @@
-import java.awt.*;
+package Game.Enemy;
+
+import Core.GameObject;
+
 import java.util.Random;
 public class EnemySqawner extends GameObject {
     private int count =0;

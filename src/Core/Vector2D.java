@@ -1,3 +1,5 @@
+package Core;
+
 public class Vector2D {
     public float x;
     public float y;
@@ -58,18 +60,15 @@ public class Vector2D {
     }
     public Vector2D normalize(){
         if(length()!=0) {
-            this.x = this.x / this.length();
-            this.y = this.y / this.length();
+            return new Vector2D(this.x/this.length(),this.y/this.length());
         }
-        return this;
+        return new Vector2D();
     }
-    public Vector2D rotate(int degree, Vector2D axis){
+    public Vector2D rotate(double degree, Vector2D axis){
         double angle =Math.toRadians(degree);
         this.subtractBy(axis);
         float x=(float) (this.x*Math.cos(angle)-this.y*Math.sin(angle));
         float y=(float) (this.x*Math.sin(angle)+this.y*Math.cos(angle));
-        this.x = x+axis.x;
-        this.y = y+axis.y;
-        return this;
+        return new Vector2D(x+axis.x,y+axis.y);
     }
 }

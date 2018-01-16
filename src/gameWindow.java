@@ -6,16 +6,16 @@ import java.awt.event.WindowEvent;
 
 public class gameWindow extends JFrame{
 
-    gameCanvas gameCanvas;
+    GameCanvas gameCanvas;
     private long lasttime=0;
     public gameWindow(){
-        this.setSize(419,648);
+        this.setSize(415,640);
         this.setupGameCanvas();
         this.setVisible(true);
         this.event();
     }
     private void setupGameCanvas(){
-        this.gameCanvas = new gameCanvas();
+        this.gameCanvas = new GameCanvas();
         this.add(this.gameCanvas);
     }
     private void event(){
