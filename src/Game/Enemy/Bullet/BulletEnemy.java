@@ -2,17 +2,16 @@ package Game.Enemy.Bullet;
 
 import Core.GameObject;
 import Core.Vector2D;
-import Game.Player.Player;
 import Physic.BoxCollider;
 import Physic.PhysicBody;
-import utils.Utils;
+import Renderer.ImageRenderer;
 
 public class BulletEnemy extends GameObject implements PhysicBody {
     public Vector2D velocity;
     BoxCollider boxCollider;
     public BulletEnemy(){
         this.velocity = new Vector2D();
-        this.image = Utils.loadImage("resources/square/enemy_square_bullet.png");
+        this.renderer = new ImageRenderer("resources/square/enemy_square_bullet.png");
         this.boxCollider = new BoxCollider(10,10);
     }
     @Override
@@ -20,6 +19,9 @@ public class BulletEnemy extends GameObject implements PhysicBody {
         super.run();
         this.position.addUp(this.velocity);
         this.boxCollider.position.set(this.position);
+        if (this.position.y>610){
+            this.isAlive=false;
+        }
     }
 
     @Override
@@ -28,6 +30,5 @@ public class BulletEnemy extends GameObject implements PhysicBody {
     }
     public void getHit(){
         this.isAlive=false;
-        System.out.println("Bullet get hit");
     }
 }

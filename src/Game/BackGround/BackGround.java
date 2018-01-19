@@ -1,19 +1,11 @@
 package Game.BackGround;
 
 import Core.GameObject;
-import utils.Utils;
-
-import java.awt.*;
+import Renderer.ImageRenderer;
 
 public class BackGround extends GameObject {
     public BackGround(){
-        this.image = Utils.loadImage("resources/background/background.png");
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-        if (this.image!=null){
-            graphics.drawImage(this.image,(int)this.position.x,(int)this.position.y,null);
-        }
+        this.renderer = new ImageRenderer("resources/background/background.png");
+        this.position.set(200,300);
     }
 }

@@ -1,9 +1,6 @@
-import Core.GameObject;
+import Core.GameObjectManager;
 import Game.BackGround.BackGround;
-import Game.Enemy.CircleEnemy;
-import Game.Enemy.EnemyShoot;
 import Game.Enemy.EnemySqawner;
-import Game.Enemy.MatrixEnemy;
 import Game.Player.Player;
 
 import javax.swing.*;
@@ -16,7 +13,6 @@ public class GameCanvas extends JPanel{
     BufferedImage backGround;
     BufferedImage backBuffered;
     Graphics graphics;
-    public Player player;
     Random random;
     int count =0;
     public GameCanvas(){
@@ -29,17 +25,16 @@ public class GameCanvas extends JPanel{
         this.setupEnemy();
     }
 
-    private void setupBackGround(){
-        GameObject.add(new BackGround());
+    private void setupBackGround() {
+        GameObjectManager.instance.recycle(BackGround.class);
     }
     private void setupEnemy(){
-        GameObject.add(new EnemySqawner());
-        GameObject.add(new CircleEnemy());
-        GameObject.add(new MatrixEnemy());
+        GameObjectManager.instance.recycle(EnemySqawner.class);
+//        GameObjectManager.instance.recycle(CircleEnemy.class);
+//        GameObjectManager.instance.recycle(MatrixEnemy.class);
     }
     private void setupPlayer(){
-        this.player = new Player();
-        GameObject.add(player);
+        GameObjectManager.instance.recycle(Player.class);
     }
     private void setupBackBuffer(){
         this.backBuffered = new BufferedImage(400,600,BufferedImage.TYPE_4BYTE_ABGR);
@@ -51,10 +46,10 @@ public class GameCanvas extends JPanel{
     }
     public void renderAll(){
         this.graphics.drawImage(this.backGround,0,0,null);
-        GameObject.renderAll(graphics);
+        GameObjectManager.instance.renderAll(graphics);
         this.repaint();
     }
     public void runAll(){
-        GameObject.runAll();
+        GameObjectManager.instance.runAll();
     }
 }

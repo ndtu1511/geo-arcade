@@ -1,33 +1,35 @@
 package Game.Enemy;
 
+import Core.FrameCounter;
 import Core.GameObject;
+import Core.GameObjectManager;
 
 import java.util.Random;
 public class EnemySqawner extends GameObject {
     private int count =0;
     Random random;
-    Enemy enemy;
+//    Enemy enemy;
+    FrameCounter frameCounter;
     public EnemySqawner(){
         this.random = new Random();
+        this.frameCounter = new FrameCounter(50);
     }
     @Override
     public void run(){
-        if (this.count >=50){
+        if (frameCounter.run()){
             int randomEnemy = random.nextInt(4);
             if (randomEnemy==1){
-                enemy = new MediumEnemy();
+                Enemy enemy = GameObjectManager.instance.recycle(MediumEnemy.class);
+                enemy.position.set(random.nextInt(400),0.0f);
                 enemy.velocity.set(0.0f,1.0f);
             }
             else {
-                enemy = new Enemy();
+                Enemy enemy = GameObjectManager.instance.recycle(Enemy.class);
+                enemy.position.set(random.nextInt(400),0.0f);
                 enemy.velocity.set(0.0f,random.nextInt(6)+1);
             }
-            enemy.position.set(random.nextInt(400),0.0f);
-            GameObject.add(enemy);
-            this.count=0;
-        }
-        else {
-            this.count++;
+//            GameObjectManager.instance.add(enemy);
+            this.frameCounter.reset();
         }
     }
 }
